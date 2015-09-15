@@ -1,4 +1,6 @@
 class Customer < ActiveRecord::Base
+  extend RailsEngineBase
+
   has_many :invoices
 
   validates :first_name, presence: true
