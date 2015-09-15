@@ -29,10 +29,10 @@ describe Item do
   end
 
   describe '#unit_price' do
-    it 'is valid wth a unit_price of zero' do
+    it 'is invalid wth a unit_price of zero' do
       @item.unit_price = 0
 
-      expect(@item).to be_valid
+      expect(@item).to be_invalid
     end
 
     it 'is invalid less than zero unit_price' do
