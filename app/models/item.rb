@@ -1,4 +1,6 @@
 class Item < ActiveRecord::Base
+  extend RailsEngineBase
+  
   belongs_to :merchant
   has_many   :invoice_items
   has_many   :invoices, through: :invoice_items
