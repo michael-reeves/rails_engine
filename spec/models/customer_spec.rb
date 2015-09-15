@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe Customer do
-
   before do
     @customer = Customer.new(first_name: 'John', last_name: 'Doe')
   end
