@@ -51,7 +51,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   # database_cleaner gem
-  config.before(:suite) do
+  config.before(:each) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
   end
