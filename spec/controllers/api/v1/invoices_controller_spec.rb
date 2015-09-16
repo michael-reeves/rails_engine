@@ -75,7 +75,7 @@ describe Api::V1::InvoicesController do
       invoice = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to              be_success
-      expect(invoice[:status]).to      eq 'ordered'
+      expect(invoice[:status]).to      eq 'shipped'
       expect(invoice[:customer_id]).to eq 1
       expect(invoice[:merchant_id]).to eq 1
     end
@@ -86,7 +86,7 @@ describe Api::V1::InvoicesController do
       invoice = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to              be_success
-      expect(invoice[:status]).to      eq 'ordered'
+      expect(invoice[:status]).to      eq 'shipped'
       expect(invoice[:customer_id]).to eq 1
       expect(invoice[:merchant_id]).to eq 1
     end
@@ -223,7 +223,7 @@ describe Api::V1::InvoicesController do
       expect(invoice_items.count).to       eq 2
       expect(invoice_item[:id]).to         eq 1
       expect(invoice_item[:quantity]).to   eq 4
-      expect(invoice_item[:unit_price]).to eq 399
+      expect(invoice_item[:unit_price]).to eq "399.0"
     end
   end
 
@@ -260,7 +260,7 @@ describe Api::V1::InvoicesController do
       expect(item[:id]).to          eq 1
       expect(item[:name]).to        eq "First item"
       expect(item[:description]).to eq "First description"
-      expect(item[:unit_price]).to  eq 399
+      expect(item[:unit_price]).to  eq "399.0"
     end
   end
 

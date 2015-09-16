@@ -1,6 +1,4 @@
 class Invoice < ActiveRecord::Base
-  extend RailsEngineBase
-
   belongs_to :customer
   belongs_to :merchant
 
