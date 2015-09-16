@@ -10,24 +10,30 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def find
-    respond_with Merchant.find(params)
+    respond_with Merchant.find_by(find_params)
   end
 
   def find_all
-    respond_with Merchant.find_all(params)
+    respond_with Merchant.where(find_params)
   end
 
   def random
-    respond_with Merchant.random
+    respond_with Merchant.order('RANDOM()').first
   end
 
   def items
-    merchant = Merchant.find(id: params[:merchant_id])
+    merchant = Merchant.find(params[:merchant_id])
     respond_with merchant.items
   end
 
   def invoices
-    merchant = Merchant.find(id: params[:merchant_id])
+    merchant = Merchant.find(params[:merchant_id])
     respond_with merchant.invoices
   end
+
+  private
+
+    def find_params
+      params.permit(:id, :name, :created_at, :updated_at)
+    end
 end

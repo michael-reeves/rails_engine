@@ -107,7 +107,7 @@ describe Api::V1::MerchantsController do
       expect(item[:id]).to          eq 1
       expect(item[:name]).to        eq "Item 1"
       expect(item[:description]).to eq "Some text"
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
   end
 
@@ -115,7 +115,7 @@ describe Api::V1::MerchantsController do
     it 'an array of merchant invoices' do
       customer1 = Customer.create!(first_name: "Jon",  last_name: "Snow")
       customer2 = Customer.create!(first_name: "Arya", last_name: "Stark")
-      
+
       item1 = merchant1.invoices.create!(status:      "ordered",
                                          customer_id: customer1.id)
       item2 = merchant1.invoices.create!(status:      "shipped",
