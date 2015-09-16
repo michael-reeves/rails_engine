@@ -138,4 +138,37 @@ describe Api::V1::CustomersController do
       expect(invoice[:merchant_id]).to eq 1
     end
   end
+
+  describe 'GET #transactions' do
+    it "returns an array of customer transactions" do
+      merchant1 = Merchant.create(name: 'Stark')
+      merchant2 = Merchant.create(name: 'Lannister')
+
+      invoice1 = Invoice.create(merchant_id: merchant1.id,
+                                customer_id: customer1.id, status: 'ordered')
+      invoice2 = Invoice.create(merchant_id: merchant2.id,
+                                customer_id: customer1.id, status: 'shipped')
+
+      transaction1 = invoice1.transactions.create(
+                                      credit_card_number: "4321876554329876",
+                                      result: 'failed')
+      transaction2 = invoice1.transactions.create(
+                                      credit_card_number: "4321876554321234",
+                                      result: 'success')
+      transaction3 = invoice2.transactions.create(
+                                      credit_card_number: "4321876554321234",
+                                      result: 'success')
+
+      get :transactions, format: :json, customer_id: customer1.id
+
+      transactions = JSON.parse(response.body, symbolize_names: true)
+      transaction  = transactions.first
+
+      expect(response).to                         be_success
+      expect(transactions.count).to               eq 3
+      expect(transaction[:id]).to                 eq 1
+      expect(transaction[:result]).to             eq "failed"
+      expect(transaction[:credit_card_number]).to eq "4321876554329876"
+    end
+  end
 end
