@@ -182,4 +182,52 @@ describe Api::V1::MerchantsController do
       # expect(top_revenue[:revenue]).to eq "20000.00"
     end
   end
+
+  describe 'GET #most_items?quantity=x' do
+    it "returns the top x merchants ranked by total revenue" do
+      customer1 = Customer.create!(first_name: "Jon",  last_name: "Snow")
+      customer2 = Customer.create!(first_name: "Arya", last_name: "Stark")
+
+      item1 = merchant1.items.create!(name: "Item 1",
+                                      description: "Some text",
+                                      unit_price: 1)
+      item2 = merchant2.items.create!(name: "Item 2",
+                                      description: "Some other text",
+                                      unit_price: 20)
+      item3 = merchant3.items.create!(name: "Item 3",
+                                      description: "Some final text",
+                                      unit_price: 10000)
+
+      invoice1 = merchant1.invoices.create!(status:      "ordered",
+                                            customer_id: customer1.id)
+      invoice2 = merchant2.invoices.create!(status:      "shipped",
+                                            customer_id: customer1.id)
+      invoice3 = merchant3.invoices.create!(status:      "shipped",
+                                            customer_id: customer2.id)
+
+      transaction1 = invoice1.transactions.create( credit_card_number: "9876543298765432", result: "success" )
+      transaction2 = invoice2.transactions.create( credit_card_number: "1234567812345678", result: "success" )
+      transaction3 = invoice3.transactions.create( credit_card_number: "4321567843215678", result: "success" )
+
+      invoice_item1 = invoice1.invoice_items.create(item_id: item1.id,
+                                                    quantity: 1,
+                                                    unit_price: item1.unit_price)
+      invoice_item2 = invoice2.invoice_items.create(item_id: item2.id,
+                                                    quantity: 20,
+                                                    unit_price: item2.unit_price)
+      invoice_item3 = invoice3.invoice_items.create(item_id: item3.id,
+                                                    quantity: 2000,
+                                                    unit_price: item3.unit_price)
+      get :most_revenue, format: :json, quantity: 2
+
+      most_items = JSON.parse(response.body, symbolize_names: true)
+      top_seller  = most_items.first
+
+      expect(response).to            be_success
+      expect(most_items.count).to    eq 2
+      expect(top_seller[:id]).to     eq 3
+      expect(top_seller[:name]).to   eq "Tyrell"
+      # expect(top_revenue[:revenue]).to eq "20000.00"
+    end
+  end
 end

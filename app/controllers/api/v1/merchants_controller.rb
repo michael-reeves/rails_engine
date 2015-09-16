@@ -32,7 +32,15 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def most_revenue
-    respond_with Merchant.most_revenue(quantity: params[:quantity])
+    respond_with Merchant.most_revenue(params[:quantity])
+  end
+
+  def most_items
+    respond_with Merchant.most_items(params[:quantity])
+  end
+
+  def revenue
+    respond_with Merchant.revenue(params[:date])
   end
 
   private
