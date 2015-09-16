@@ -147,7 +147,7 @@ describe Api::V1::InvoicesController do
   end
 
   describe 'GET #random' do
-    it 'returns a random invoice' do
+    it 'returns a random Invoice' do
       get :random, format: :json
 
       invoice = JSON.parse(response.body, symbolize_names: true)
