@@ -16,6 +16,12 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require "simplecov"
+
+SimpleCov.start do
+  add_filter "/spec/"
+end
+
 RSpec.configure do |config|
   # elimiate garbage in backtrace
   config.backtrace_exclusion_patterns << %r{/gems/}
