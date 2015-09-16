@@ -1,6 +1,4 @@
 class InvoiceItem < ActiveRecord::Base
-  extend RailsEngineBase
-
   belongs_to :item
   belongs_to :invoice
 

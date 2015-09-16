@@ -58,7 +58,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 1
       expect(invoice_item[:invoice_id]).to eq 1
       expect(invoice_item[:quantity]).to   eq 3
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:unit_price]).to eq "299.0"
     end
   end
 
@@ -72,7 +72,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 1
       expect(invoice_item[:invoice_id]).to eq 1
       expect(invoice_item[:quantity]).to   eq 3
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:unit_price]).to eq "299.0"
     end
   end
 
@@ -86,7 +86,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 1
       expect(invoice_item[:invoice_id]).to eq 1
       expect(invoice_item[:quantity]).to   eq 3
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:unit_price]).to eq "299.0"
     end
 
     it 'finds an InvoiceItem by item_id' do
@@ -96,9 +96,9 @@ describe Api::V1::InvoiceItemsController do
 
       expect(response).to                  be_success
       expect(invoice_item[:item_id]).to    eq 1
-      expect(invoice_item[:invoice_id]).to eq 1
-      expect(invoice_item[:quantity]).to   eq 3
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:invoice_id]).to eq 2
+      expect(invoice_item[:quantity]).to   eq 4
+      expect(invoice_item[:unit_price]).to eq "299.0"
     end
 
     it 'finds an InvoiceItem by invoice_id' do
@@ -107,10 +107,10 @@ describe Api::V1::InvoiceItemsController do
       invoice_item = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to                  be_success
-      expect(invoice_item[:item_id]).to    eq 1
+      expect(invoice_item[:item_id]).to    eq 2
       expect(invoice_item[:invoice_id]).to eq 1
-      expect(invoice_item[:quantity]).to   eq 3
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:quantity]).to   eq 5
+      expect(invoice_item[:unit_price]).to eq "399.0"
     end
 
     it 'finds an InvoiceItem by quantity' do
@@ -122,7 +122,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 1
       expect(invoice_item[:invoice_id]).to eq 1
       expect(invoice_item[:quantity]).to   eq 3
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:unit_price]).to eq "299.0"
     end
 
     it 'finds an InvoiceItem by unit_price' do
@@ -134,7 +134,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 1
       expect(invoice_item[:invoice_id]).to eq 1
       expect(invoice_item[:quantity]).to   eq 3
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:unit_price]).to eq "299.0"
     end
   end
 
@@ -150,7 +150,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 1
       expect(invoice_item[:invoice_id]).to eq 1
       expect(invoice_item[:quantity]).to   eq 3
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:unit_price]).to eq "299.0"
     end
 
     it 'finds all InvoiceItems by item_id' do
@@ -164,7 +164,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 2
       expect(invoice_item[:invoice_id]).to eq 1
       expect(invoice_item[:quantity]).to   eq 5
-      expect(invoice_item[:unit_price]).to eq 399
+      expect(invoice_item[:unit_price]).to eq "399.0"
     end
 
     it 'finds all InvoiceItems by invoice_id' do
@@ -178,7 +178,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 1
       expect(invoice_item[:invoice_id]).to eq 2
       expect(invoice_item[:quantity]).to   eq 4
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:unit_price]).to eq "299.0"
     end
 
     it 'finds all InvoiceItems by quantity' do
@@ -192,7 +192,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 1
       expect(invoice_item[:invoice_id]).to eq 1
       expect(invoice_item[:quantity]).to   eq 3
-      expect(invoice_item[:unit_price]).to eq 299
+      expect(invoice_item[:unit_price]).to eq "299.0"
     end
 
     it 'finds all InvoiceItems by unit_price' do
@@ -206,7 +206,7 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:item_id]).to    eq 2
       expect(invoice_item[:invoice_id]).to eq 1
       expect(invoice_item[:quantity]).to   eq 5
-      expect(invoice_item[:unit_price]).to eq 399
+      expect(invoice_item[:unit_price]).to eq "399.0"
     end
   end
 
@@ -279,7 +279,7 @@ describe Api::V1::InvoiceItemsController do
       expect(item[:id]).to          eq 3
       expect(item[:name]).to        eq "First item"
       expect(item[:description]).to eq "First description"
-      expect(item[:unit_price]).to  eq 399
+      expect(item[:unit_price]).to  eq "399.0"
       expect(item[:merchant_id]).to eq 2
     end
   end

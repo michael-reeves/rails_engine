@@ -10,24 +10,31 @@ class Api::V1::InvoiceItemsController < ApplicationController
   end
 
   def find
-    respond_with InvoiceItem.find(params)
+    respond_with InvoiceItem.find_by(find_params)
   end
 
   def find_all
-    respond_with InvoiceItem.find_all(params)
+    respond_with InvoiceItem.where(find_params)
   end
 
   def random
-    respond_with InvoiceItem.random
+    respond_with InvoiceItem.order('RANDOM()').first
   end
 
   def invoice
-    invoice_item = InvoiceItem.find(id: params[:invoice_item_id])
+    invoice_item = InvoiceItem.find_by(id: params[:invoice_item_id])
     respond_with invoice_item.invoice
   end
 
   def item
-    invoice_item = InvoiceItem.find(id: params[:invoice_item_id])
+    invoice_item = InvoiceItem.find_by(id: params[:invoice_item_id])
     respond_with invoice_item.item
   end
+
+  private
+
+    def find_params
+      params.permit(:id, :item_id, :invoice_id, :quantity,
+                    :unit_price, :created_at, :updated_at)
+    end
 end
