@@ -22,12 +22,12 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def items
-    merchant = Merchant.find(params[:merchant_id])
+    merchant = Merchant.find_by(id: params[:merchant_id])
     respond_with merchant.items
   end
 
   def invoices
-    merchant = Merchant.find(params[:merchant_id])
+    merchant = Merchant.find_by(id: params[:merchant_id])
     respond_with merchant.invoices
   end
 

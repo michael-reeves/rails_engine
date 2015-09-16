@@ -22,7 +22,7 @@ class Api::V1::TransactionsController < ApplicationController
   end
 
   def invoice
-    transaction = Transaction.find(params[:transaction_id])
+    transaction = Transaction.find_by(id: params[:transaction_id])
     respond_with transaction.invoice
   end
 
