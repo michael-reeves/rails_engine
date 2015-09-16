@@ -114,4 +114,28 @@ describe Api::V1::CustomersController do
       expect(customer[:last_name]).not_to  be_nil
     end
   end
+
+  describe 'GET #invoices' do
+    it "returns an array of customer invoices" do
+      merchant1 = Merchant.create(name: 'Stark')
+      merchant2 = Merchant.create(name: 'Lannister')
+
+      invoice1 = Invoice.create(merchant_id: merchant1.id,
+                                customer_id: customer1.id, status: 'ordered')
+      invoice2 = Invoice.create(merchant_id: merchant2.id,
+                                customer_id: customer1.id, status: 'shipped')
+      invoice3 = Invoice.create(merchant_id: merchant1.id,
+                                customer_id: customer2.id, status: 'ordered')
+
+      get :invoices, format: :json, customer_id: customer1.id
+
+      invoices = JSON.parse(response.body, symbolize_names: true)
+      invoice  = invoices.first
+
+      expect(response).to            be_success
+      expect(invoices.count).to eq 2
+      expect(invoice[:id]).to eq 1
+      expect(invoice[:merchant_id]).to eq 1
+    end
+  end
 end

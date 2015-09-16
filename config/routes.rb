@@ -11,7 +11,8 @@ Rails.application.routes.draw do
       end
 
       resources :customers, only: [:index, :show] do
-        #  get 'find'
+        get 'invoices'
+
         collection do
           get 'find'
           get 'find_all'

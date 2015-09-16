@@ -20,4 +20,9 @@ class Api::V1::CustomersController < ApplicationController
   def random
     respond_with Customer.random
   end
+
+  def invoices
+    customer = Customer.find_by(id: params[:customer_id])
+    respond_with customer.invoices
+  end
 end
