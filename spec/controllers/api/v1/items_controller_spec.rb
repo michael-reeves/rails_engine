@@ -185,4 +185,52 @@ describe Api::V1::ItemsController do
       expect(item[:merchant_id]).not_to be_nil
     end
   end
+
+  describe 'GET #invoice_items' do
+    it 'returns a collection of associated invoice_items' do
+      merchant1 = Merchant.create(name: 'Stark')
+      customer1 = Customer.create!(first_name: "Jon",  last_name: "Snow")
+      customer2 = Customer.create!(first_name: "Arya",  last_name: "Stark")
+
+      invoice1 = Invoice.create(merchant_id: merchant.id,
+                                customer_id: customer1.id, status: 'ordered')
+      invoice2 = Invoice.create(merchant_id: merchant1.id,
+                                customer_id: customer2.id, status: 'shipped')
+
+      item = Item.create(name:        "First item",
+                         description: "First description",
+                         unit_price:  399,
+                         merchant_id: merchant.id)
+      invoice_item1 = invoice1.invoice_items.create(item_id: item.id,
+                                                    quantity: 4,
+                                                    unit_price: item.unit_price)
+      invoice_item2 = invoice2.invoice_items.create(item_id:    item.id,
+                                                    quantity:   10,
+                                                    unit_price: item.unit_price)
+
+      get :invoice_items, format: :json, item_id: item.id
+
+      invoice_items = JSON.parse(response.body, symbolize_names: true)
+      invoice_item  = invoice_items.first
+
+      expect(response).to                  be_success
+      expect(invoice_items.count).to       eq 2
+      expect(invoice_item[:id]).to         eq 1
+      expect(invoice_item[:invoice_id]).to eq invoice1.id
+      expect(invoice_item[:quantity]).to   eq 4
+      expect(invoice_item[:unit_price]).to eq 399
+    end
+  end
+
+  describe 'GET #merchant' do
+    it 'returns the merchant for the item' do
+      get :merchant, format: :json, item_id: item1.id
+
+      merchant_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to                 be_success
+      expect(merchant_response[:id]).to   eq 1
+      expect(merchant_response[:name]).to eq 'Store 1'
+    end
+  end
 end
