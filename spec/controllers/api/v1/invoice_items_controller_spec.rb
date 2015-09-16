@@ -224,4 +224,63 @@ describe Api::V1::InvoiceItemsController do
       expect(invoice_item[:unit_price]).not_to be_nil
     end
   end
+
+  describe 'GET #invoice' do
+    it 'returns the invoice for the invoice_item' do
+      merchant = Merchant.create(name: 'Stark')
+      customer = Customer.create!(first_name: "Jon",  last_name: "Snow")
+
+      invoice = Invoice.create(merchant_id: merchant.id,
+                               customer_id: customer.id, status: 'ordered')
+
+      item = Item.create(name:        "First item",
+                         description: "First description",
+                         unit_price:  399,
+                         merchant_id: merchant.id)
+
+      invoice_item = invoice.invoice_items.create(item_id: item.id,
+                                                  quantity: 4,
+                                                  unit_price: item.unit_price)
+
+      get :invoice, format: :json, invoice_item_id: invoice_item.id
+
+      invoice = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to              be_success
+      expect(invoice[:id]).to          eq 3
+      expect(invoice[:merchant_id]).to eq 2
+      expect(invoice[:customer_id]).to eq 2
+      expect(invoice[:status]).to      eq "ordered"
+    end
+  end
+
+  describe 'GET #item' do
+    it 'returns the invoice for the invoice_item' do
+      merchant = Merchant.create(name: 'Stark')
+      customer = Customer.create!(first_name: "Jon",  last_name: "Snow")
+
+      invoice = Invoice.create(merchant_id: merchant.id,
+                               customer_id: customer.id, status: 'ordered')
+
+      item = Item.create(name:        "First item",
+                         description: "First description",
+                         unit_price:  399,
+                         merchant_id: merchant.id)
+
+      invoice_item = invoice.invoice_items.create(item_id: item.id,
+                                                  quantity: 4,
+                                                  unit_price: item.unit_price)
+
+      get :item, format: :json, invoice_item_id: invoice_item.id
+
+      item = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to           be_success
+      expect(item[:id]).to          eq 3
+      expect(item[:name]).to        eq "First item"
+      expect(item[:description]).to eq "First description"
+      expect(item[:unit_price]).to  eq 399
+      expect(item[:merchant_id]).to eq 2
+    end
+  end
 end
