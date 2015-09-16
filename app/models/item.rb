@@ -1,6 +1,6 @@
 class Item < ActiveRecord::Base
   extend RailsEngineBase
-  
+
   belongs_to :merchant
   has_many   :invoice_items
   has_many   :invoices, through: :invoice_items
@@ -8,7 +8,6 @@ class Item < ActiveRecord::Base
   validates :name,        presence: true
   validates :description, presence: true
   validates :unit_price,  presence: true,
-                          numericality: { only_integer: true,
-                                          greater_than: 0 }
+                          numericality: { greater_than: 0 }
   validates :merchant_id, presence: true
 end

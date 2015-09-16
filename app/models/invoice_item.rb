@@ -1,6 +1,6 @@
 class InvoiceItem < ActiveRecord::Base
   extend RailsEngineBase
-  
+
   belongs_to :item
   belongs_to :invoice
 
@@ -10,6 +10,5 @@ class InvoiceItem < ActiveRecord::Base
                          numericality: { only_integer: true,
                                          greater_than: 0 }
   validates :unit_price, presence: true,
-                         numericality: { only_integer: true,
-                                         greater_than: 0 }
+                         numericality: { greater_than: 0 }
 end
