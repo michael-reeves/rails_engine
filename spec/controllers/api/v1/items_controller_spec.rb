@@ -4,18 +4,18 @@ describe Api::V1::ItemsController do
   let!(:merchant) { Merchant.create!(name:"Store 1") }
   let!(:item1) { Item.create!(name: "Item 1",
                               description: "Some text",
-                              unit_price: 299,
+                              unit_price: 299.00,
                               merchant_id: merchant.id)
                }
   let!(:item2) { Item.create!(name: "Item 2",
                               description: "Some other text",
-                              unit_price: 399,
+                              unit_price: 399.00,
                               merchant_id: merchant.id)
                }
 
   let!(:item3) { Item.create!(name: "Item 3",
                               description: "Some final text",
-                              unit_price: 399,
+                              unit_price: 399.00,
                               merchant_id: merchant.id)
                }
 
@@ -30,7 +30,7 @@ describe Api::V1::ItemsController do
       expect(items.count).to        eq 3
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
   end
 
@@ -43,7 +43,7 @@ describe Api::V1::ItemsController do
       expect(response).to           be_success
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
   end
 
@@ -56,7 +56,7 @@ describe Api::V1::ItemsController do
       expect(response).to           be_success
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
 
     it 'finds an Item by name' do
@@ -67,7 +67,7 @@ describe Api::V1::ItemsController do
       expect(response).to           be_success
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
 
     it 'finds an Item by description' do
@@ -78,7 +78,7 @@ describe Api::V1::ItemsController do
       expect(response).to           be_success
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
 
     it 'finds an Item by unit_price' do
@@ -89,7 +89,7 @@ describe Api::V1::ItemsController do
       expect(response).to           be_success
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
 
     it 'finds an Item by merchant_id' do
@@ -98,9 +98,9 @@ describe Api::V1::ItemsController do
       item = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to           be_success
-      expect(item[:name]).to        eq 'Item 1'
-      expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:name]).to        eq 'Item 3'
+      expect(item[:description]).to eq 'Some final text'
+      expect(item[:unit_price]).to  eq "399.0"
     end
   end
 
@@ -115,7 +115,7 @@ describe Api::V1::ItemsController do
       expect(items.count).to        eq 1
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
 
     it 'finds all Items by name' do
@@ -128,7 +128,7 @@ describe Api::V1::ItemsController do
       expect(items.count).to        eq 1
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
 
     it 'finds all Items by description' do
@@ -141,7 +141,7 @@ describe Api::V1::ItemsController do
       expect(items.count).to        eq 1
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
 
     it 'finds all Items by unit_price' do
@@ -154,7 +154,7 @@ describe Api::V1::ItemsController do
       expect(items.count).to        eq 2
       expect(item[:name]).to        eq 'Item 2'
       expect(item[:description]).to eq 'Some other text'
-      expect(item[:unit_price]).to  eq 399
+      expect(item[:unit_price]).to  eq "399.0"
     end
 
     it 'finds all Items by merchant_id' do
@@ -167,7 +167,7 @@ describe Api::V1::ItemsController do
       expect(items.count).to        eq 3
       expect(item[:name]).to        eq 'Item 1'
       expect(item[:description]).to eq 'Some text'
-      expect(item[:unit_price]).to  eq 299
+      expect(item[:unit_price]).to  eq "299.0"
     end
   end
 
@@ -218,7 +218,7 @@ describe Api::V1::ItemsController do
       expect(invoice_item[:id]).to         eq 1
       expect(invoice_item[:invoice_id]).to eq invoice1.id
       expect(invoice_item[:quantity]).to   eq 4
-      expect(invoice_item[:unit_price]).to eq 399
+      expect(invoice_item[:unit_price]).to eq "399.0"
     end
   end
 
