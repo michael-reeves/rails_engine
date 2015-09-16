@@ -170,4 +170,18 @@ describe Api::V1::TransactionsController do
       expect(transaction[:result]).not_to             be_nil
     end
   end
+
+  describe 'GET #invoice' do
+    it 'returns the invoice associated with the transaction' do
+      get :invoice, format: :json, transaction_id: transaction3.id
+
+      invoice = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to              be_success
+      expect(invoice[:id]).to          eq 2
+      expect(invoice[:status]).to      eq 'shipped'
+      expect(invoice[:customer_id]).to eq 1
+      expect(invoice[:merchant_id]).to eq 1
+    end
+  end
 end

@@ -20,4 +20,9 @@ class Api::V1::TransactionsController < ApplicationController
   def random
     respond_with Transaction.random
   end
+
+  def invoice
+    transaction = Transaction.find(id: params[:transaction_id])
+    respond_with transaction.invoice
+  end
 end

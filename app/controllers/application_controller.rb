@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
       params[:item_id]         = params[:item_id].to_i
       params[:invoice_id]      = params[:invoice_id].to_i
       params[:invoice_item_id] = params[:invoice_item_id].to_i
+      params[:transaction_id]  = params[:transaction_id].to_i
       params[:quantity]        = params[:quantity].to_i
       params[:unit_price]      = params[:unit_price].to_i
       params[:customer_id]     = params[:customer_id].to_i
