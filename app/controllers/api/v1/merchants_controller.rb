@@ -1,6 +1,8 @@
 class Api::V1::MerchantsController < ApplicationController
   respond_to :json
 
+  before_action :get_merchant, only: [:items, :invoices, :merchant_revenue]
+
   def index
     respond_with Merchant.all
   end
@@ -22,13 +24,11 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def items
-    merchant = Merchant.find_by(id: params[:merchant_id])
-    respond_with merchant.items
+    respond_with @merchant.items
   end
 
   def invoices
-    merchant = Merchant.find_by(id: params[:merchant_id])
-    respond_with merchant.invoices
+    respond_with @merchant.invoices
   end
 
   def most_revenue
@@ -44,11 +44,10 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def merchant_revenue
-    merchant = Merchant.find_by(id: params[:merchant_id])
     if date = params[:date]
-      respond_with revenue: merchant.revenue_per_day(date)
+      respond_with revenue: @merchant.revenue_per_day(date)
     else
-      respond_with revenue: merchant.total_revenue
+      respond_with revenue: @merchant.total_revenue
     end
   end
 
@@ -56,5 +55,9 @@ class Api::V1::MerchantsController < ApplicationController
 
     def find_params
       params.permit(:id, :name, :created_at, :updated_at)
+    end
+
+    def get_merchant
+      @merchant = Merchant.find_by(id: params[:merchant_id])
     end
 end

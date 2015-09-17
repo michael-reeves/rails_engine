@@ -1,6 +1,9 @@
 class Api::V1::CustomersController < ApplicationController
   respond_to :json
 
+  before_action :get_customer, only: [:invoices, :transactions,
+                                      :favorite_merchant]
+
   def index
     respond_with Customer.all
   end
@@ -22,23 +25,24 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def invoices
-    customer = Customer.find_by(id: params[:customer_id])
-    respond_with customer.invoices
+    respond_with @customer.invoices
   end
 
   def transactions
-    customer = Customer.find_by(id: params[:customer_id])
-    respond_with customer.transactions
+    respond_with @customer.transactions
   end
 
   def favorite_merchant
-    customer = Customer.find_by(id: params[:customer_id])
-    respond_with customer.favorite_merchant
+    respond_with @customer.favorite_merchant
   end
 
   private
 
     def find_params
       params.permit(:id, :first_name, :last_name, :created_at, :updated_at)
+    end
+
+    def get_customer
+      @customer = Customer.find_by(id: params[:customer_id])
     end
 end

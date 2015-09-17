@@ -1,6 +1,9 @@
 class Api::V1::InvoicesController < ApplicationController
   respond_to :json
 
+  before_action :get_invoice, only: [:items, :invoice_items,
+                                     :transactions, :customer, :merchant]
+
   def index
     respond_with Invoice.all
   end
@@ -22,28 +25,28 @@ class Api::V1::InvoicesController < ApplicationController
   end
 
   def transactions
-    invoice = Invoice.find_by(id: params[:invoice_id])
-    respond_with invoice.transactions
+    # invoice = Invoice.find_by(id: params[:invoice_id])
+    respond_with @invoice.transactions
   end
 
   def invoice_items
-    invoice = Invoice.find_by(id: params[:invoice_id])
-    respond_with invoice.invoice_items
+    # invoice = Invoice.find_by(id: params[:invoice_id])
+    respond_with @invoice.invoice_items
   end
 
   def items
-    invoice = Invoice.find_by(id: params[:invoice_id])
-    respond_with invoice.items
+    # invoice = Invoice.find_by(id: params[:invoice_id])
+    respond_with @invoice.items
   end
 
   def customer
-    invoice = Invoice.find_by(id: params[:invoice_id])
-    respond_with invoice.customer
+    # invoice = Invoice.find_by(id: params[:invoice_id])
+    respond_with @invoice.customer
   end
 
   def merchant
-    invoice = Invoice.find_by(id: params[:invoice_id])
-    respond_with invoice.merchant
+    # invoice = Invoice.find_by(id: params[:invoice_id])
+    respond_with @invoice.merchant
   end
 
   private
@@ -51,5 +54,9 @@ class Api::V1::InvoicesController < ApplicationController
     def find_params
       params.permit(:id, :status, :customer_id, :merchant_id,
                     :created_at, :updated_at)
+    end
+
+    def get_invoice
+      @invoice = Invoice.find_by(id: params[:invoice_id])
     end
 end

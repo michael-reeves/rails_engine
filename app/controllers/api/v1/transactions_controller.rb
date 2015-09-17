@@ -1,6 +1,8 @@
 class Api::V1::TransactionsController < ApplicationController
   respond_to :json
 
+  before_action :get_transaction, only: [:invoice]
+
   def index
     respond_with Transaction.all
   end
@@ -22,8 +24,7 @@ class Api::V1::TransactionsController < ApplicationController
   end
 
   def invoice
-    transaction = Transaction.find_by(id: params[:transaction_id])
-    respond_with transaction.invoice
+    respond_with @transaction.invoice
   end
 
   private
@@ -31,5 +32,9 @@ class Api::V1::TransactionsController < ApplicationController
     def find_params
       params.permit(:id, :invoice_id, :credit_card_number,
                     :result, :created_at, :updated_at)
+    end
+
+    def get_transaction
+      @transaction = Transaction.find_by(id: params[:transaction_id])
     end
 end

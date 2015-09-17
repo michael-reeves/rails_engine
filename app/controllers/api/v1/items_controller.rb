@@ -1,6 +1,8 @@
 class Api::V1::ItemsController < ApplicationController
   respond_to :json
 
+  before_action :get_item, only: [:invoice_items, :merchant]
+
   def index
     respond_with Item.all
   end
@@ -22,13 +24,11 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def invoice_items
-    item = Item.find_by(id: params[:item_id])
-    respond_with item.invoice_items
+    respond_with @item.invoice_items
   end
 
   def merchant
-    item = Item.find_by(id: params[:item_id])
-    respond_with item.merchant
+    respond_with @item.merchant
   end
 
   private
@@ -36,5 +36,9 @@ class Api::V1::ItemsController < ApplicationController
     def find_params
       params.permit(:id, :name, :description, :unit_price,
                     :merchant_id, :created_at, :updated_at)
+    end
+
+    def get_item
+      @item = Item.find_by(id: params[:item_id])
     end
 end
