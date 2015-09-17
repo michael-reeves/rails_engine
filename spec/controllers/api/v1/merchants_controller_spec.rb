@@ -371,4 +371,110 @@ describe Api::V1::MerchantsController do
       expect(revenue[:total_revenue]).to eq "20202.0"
     end
   end
+
+  describe 'GET :id/revenue' do
+    context 'without a date' do
+      xit 'returns the total revenue for a merchant' do
+        customer1 = Customer.create!(first_name: "Jon",  last_name: "Snow")
+        customer2 = Customer.create!(first_name: "Arya", last_name: "Stark")
+
+        time  = customer2.created_at
+
+        item1 = merchant1.items.create!(name: "Item 1",
+                                        description: "Some text",
+                                        unit_price: 1)
+        item2 = merchant1.items.create!(name: "Item 2",
+                                        description: "Some other text",
+                                        unit_price: 20)
+        item3 = merchant1.items.create!(name: "Item 3",
+                                        description: "Some final text",
+                                        unit_price: 20000)
+
+        invoice1 = merchant1.invoices.create!(status:      "ordered",
+                                              customer_id: customer1.id,
+                                              created_at: time)
+        invoice2 = merchant1.invoices.create!(status:      "shipped",
+                                              customer_id: customer1.id,
+                                              created_at: time)
+        invoice3 = merchant1.invoices.create!(status:      "shipped",
+                                              customer_id: customer2.id,
+                                              created_at: time)
+
+        transaction1 = invoice1.transactions.create( credit_card_number: "9876543298765432", result: "success" )
+        transaction2 = invoice2.transactions.create( credit_card_number: "1234567812345678", result: "success" )
+        transaction3 = invoice3.transactions.create( credit_card_number: "4321567843215678", result: "success" )
+
+        invoice_item1 = invoice1.invoice_items.create(item_id: item1.id,
+                                                      quantity: 2,
+                                                      unit_price: item1.unit_price)
+        invoice_item2 = invoice2.invoice_items.create(item_id: item2.id,
+                                                      quantity: 10,
+                                                      unit_price: item2.unit_price)
+        invoice_item3 = invoice3.invoice_items.create(item_id: item3.id,
+                                                      quantity: 1,
+                                                      unit_price: item3.unit_price)
+
+        # get "/api/v1/merchants/#{merchant1.id}/revenue", format: :json
+        get api_v1_merchant_revenue_path(merchant_id: merchant1.id), format: :json
+
+        revenue = JSON.parse(response.body, symbolize_names: true)
+
+
+        expect(response).to                be_success
+        expect(revenue[:total_revenue]).to eq "20202.0"
+      end
+    end
+
+    context 'with a date' do
+      xit 'returns the total revenue for a merchant' do
+        customer1 = Customer.create!(first_name: "Jon",  last_name: "Snow")
+        customer2 = Customer.create!(first_name: "Arya", last_name: "Stark")
+
+        time  = customer2.created_at
+
+        item1 = merchant1.items.create!(name: "Item 1",
+                                        description: "Some text",
+                                        unit_price: 1)
+        item2 = merchant1.items.create!(name: "Item 2",
+                                        description: "Some other text",
+                                        unit_price: 20)
+        item3 = merchant1.items.create!(name: "Item 3",
+                                        description: "Some final text",
+                                        unit_price: 20000)
+
+        invoice1 = merchant1.invoices.create!(status:      "ordered",
+                                              customer_id: customer1.id,
+                                              created_at: time)
+        invoice2 = merchant1.invoices.create!(status:      "shipped",
+                                              customer_id: customer1.id,
+                                              created_at: time)
+        invoice3 = merchant1.invoices.create!(status:      "shipped",
+                                              customer_id: customer2.id,
+                                              created_at: time)
+
+        transaction1 = invoice1.transactions.create( credit_card_number: "9876543298765432", result: "success" )
+        transaction2 = invoice2.transactions.create( credit_card_number: "1234567812345678", result: "success" )
+        transaction3 = invoice3.transactions.create( credit_card_number: "4321567843215678", result: "success" )
+
+        invoice_item1 = invoice1.invoice_items.create(item_id: item1.id,
+                                                      quantity: 2,
+                                                      unit_price: item1.unit_price)
+        invoice_item2 = invoice2.invoice_items.create(item_id: item2.id,
+                                                      quantity: 10,
+                                                      unit_price: item2.unit_price)
+        invoice_item3 = invoice3.invoice_items.create(item_id: item3.id,
+                                                      quantity: 1,
+                                                      unit_price: item3.unit_price)
+
+        # get "/api/v1/merchants/#{merchant1.id}/revenue", format: :json
+        get api_v1_merchant_revenue_path(merchant_id: merchant1.id), format: :json, date: time
+
+        revenue = JSON.parse(response.body, symbolize_names: true)
+
+
+        expect(response).to                be_success
+        expect(revenue[:total_revenue]).to eq "20202.0"
+      end
+    end
+  end
 end
