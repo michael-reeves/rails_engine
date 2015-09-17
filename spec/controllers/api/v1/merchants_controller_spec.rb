@@ -374,7 +374,7 @@ describe Api::V1::MerchantsController do
 
   describe 'GET :id/revenue' do
     context 'without a date' do
-      xit 'returns the total revenue for a merchant' do
+      it 'returns the total revenue for a merchant' do
         customer1 = Customer.create!(first_name: "Jon",  last_name: "Snow")
         customer2 = Customer.create!(first_name: "Arya", last_name: "Stark")
 
@@ -414,19 +414,18 @@ describe Api::V1::MerchantsController do
                                                       quantity: 1,
                                                       unit_price: item3.unit_price)
 
-        # get "/api/v1/merchants/#{merchant1.id}/revenue", format: :json
-        get api_v1_merchant_revenue_path(merchant_id: merchant1.id), format: :json
+        get :merchant_revenue, format: :json, merchant_id: merchant1.id
 
         revenue = JSON.parse(response.body, symbolize_names: true)
 
 
         expect(response).to                be_success
-        expect(revenue[:total_revenue]).to eq "20202.0"
+        expect(revenue[:revenue]).to eq "20202.0"
       end
     end
 
     context 'with a date' do
-      xit 'returns the total revenue for a merchant' do
+      it 'returns the total revenue for a merchant' do
         customer1 = Customer.create!(first_name: "Jon",  last_name: "Snow")
         customer2 = Customer.create!(first_name: "Arya", last_name: "Stark")
 
@@ -466,14 +465,13 @@ describe Api::V1::MerchantsController do
                                                       quantity: 1,
                                                       unit_price: item3.unit_price)
 
-        # get "/api/v1/merchants/#{merchant1.id}/revenue", format: :json
-        get api_v1_merchant_revenue_path(merchant_id: merchant1.id), format: :json, date: time
+        get :merchant_revenue, format: :json, merchant_id: merchant1.id, date: time
 
         revenue = JSON.parse(response.body, symbolize_names: true)
 
 
         expect(response).to                be_success
-        expect(revenue[:total_revenue]).to eq "20202.0"
+        expect(revenue[:revenue]).to eq "20202.0"
       end
     end
   end
