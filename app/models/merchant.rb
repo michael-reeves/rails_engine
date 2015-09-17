@@ -6,16 +6,9 @@ class Merchant < ActiveRecord::Base
 
   validates :name, presence: true
 
-  def revenue(date = nil)
-    invoices.paid.joins(:invoice_items).sum('unit_price * quantity')
-  end
-
-  def items_sold(date=nil)
-    invoices.paid.joins(:invoice_items).sum('quantity')
-  end
-
+  # Class methods
   def self.most_revenue(quantity)
-    merchants = all.sort_by(&:revenue).reverse
+    merchants = all.sort_by(&:total_revenue).reverse
 
     if quantity
       merchants.first(quantity.to_i)
@@ -33,4 +26,29 @@ class Merchant < ActiveRecord::Base
       merchants
     end
   end
+
+  def self.revenue(date=nil)
+    all.reduce(0) {|total, merchant| total + merchant.revenue_per_day(date) }
+  end
+
+
+  # Instance Methods
+  def total_revenue
+    paid_invoices.joins(:invoice_items).sum('unit_price * quantity')
+  end
+
+  def items_sold
+    paid_invoices.joins(:invoice_items).sum('quantity')
+  end
+
+  def revenue_per_day(date = nil)
+    invoices.where(created_at: date).paid.joins(:invoice_items).sum('unit_price * quantity')
+  end
+
+  private
+
+  def paid_invoices
+    invoices.paid
+  end
+
 end

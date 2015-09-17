@@ -40,7 +40,7 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def revenue
-    respond_with Merchant.revenue(params[:date])
+    respond_with total_revenue: Merchant.revenue(params[:date])
   end
 
   private
